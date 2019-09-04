@@ -3,23 +3,18 @@ require "date"
 module Hotel
   class Booker
     attr_reader :guests, :rooms
-    attr_accessor :reservations
+    attr_accessor :reservations, :room_list
 
-    def initialize
-      @guests = guests
-      @rooms = rooms
-      @reservations = reservations
-      connect_res
+    def initialize(number_of_rooms: 20)
+      @guests = []
+      @reservations = []
+      # connect_res
+      @room_list = []
+      while number_of_rooms > 0
+        room_list.push(Hotel::Room.new(id: number_of_rooms, status: :AVAILABLE))
+        number_of_rooms -= 1
+      end
     end
-
-    #     attr_accessor :roomList
-    # def initialize(numberOfRooms)
-    #     @roomList = []
-    #     while numberOfRooms > 0
-    #     roomList.push(Room.new(rumberOfRooms))
-    #     numberOfRooms-=1
-    #     end
-
   end
 
 =begin

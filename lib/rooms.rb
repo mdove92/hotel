@@ -1,10 +1,11 @@
 module Hotel
   class Room
-    attr_reader :id, :status
+    attr_reader :id
+    attr_accessor :status
 
-    def initialize(id:, status: AVAILABLE)
+    def initialize(id:, status: :AVAILABLE)
       @id = id
-      @status = statuus
+      @status = status
 
       accepted_statuses = [:UNAVAILABLE, :AVAILABLE]
       if !accepted_statuses.include?(status)
