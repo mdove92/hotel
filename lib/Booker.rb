@@ -15,6 +15,9 @@ module Hotel
         number_of_rooms -= 1
       end
     end
+
+    def select_room #Selects a room for a reservation on a given date
+    end
   end
 
 =begin
