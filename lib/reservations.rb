@@ -4,9 +4,9 @@ module Hotel
   class Reservation
     attr_reader :date_range, :guest, :room
 
-    def initialize(room)
-      @date_range = date_range
-      @guest = guest
+    def initialize(start_date, end_date, room)
+      @start_date = start_date
+      @end_date = end_date
       @room = room
     end
 

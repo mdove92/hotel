@@ -9,11 +9,9 @@ module Hotel
       @end_date = Date.parse(end_date)
     end
 
-    def intersects(dateRange)
-      # Figure out whether it doesn't intersect
-      doesnt_intersect = dateRange.start_date >= @end_date || dateRange.end_date <= @start_date
-      # Return the negation of that
-      return !doesnt_intersect
+    def overlaps?(date_range)
+      doesnt_overlap = date_range.start_date >= @end_date || date_range.end_date <= @start_date
+      return !doesnt_overlap
     end
   end
 end

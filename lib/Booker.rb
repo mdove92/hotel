@@ -24,83 +24,88 @@ module Hotel
 
     def initialize(number_of_rooms: 20)
       @guests = []
-      #HashMap<reservationId, HashMap <roomId, daterange>>
-      @reservationsHistory = {}
-      #Integer reservationId =0;
-      @reservationId = 0
-      #Initialize the reservationsList hashmap
+      #HashMap<reservation_id, HashMap <room_id, date_range>>
+      @reservations_history = {}
+
+      #Integer reservation_id =0;
+      @current_reservation_id = 0
+
+      #Initialize the reservations_list hashmap
       @reservations = {}
-      # connect_res
+
+      room_id = 1
+
       @room_list = []
-      while number_of_rooms > 0
-        room_list.push(Hotel::Room.new(id: number_of_rooms, status: :AVAILABLE))
-        number_of_rooms -= 1
-        @reservations[number_of_rooms] = []
+      while room_id <= number_of_rooms
+        room_list.push(room_id)
+        @reservations[room_id] = []
+        room_id += 1
       end
     end
 
     def select_room #Selects a room for a reservation on a given date
     end
 
-    def get_reservation(reservationId)
-      return @reservationsHistory[reservationId]
+    def get_reservation(reservation_id)
+      return @reservations_history[reservation_id]
     end
 
-    def make_reservation(daterange)
-      free_rooms = getFreeRooms(daterange)
-      reserveRoom = 1
-      roomId = 0
-      if (reserved_rooms.length != 0)
-        roomId = free_rooms.sample
-        reserveRoom = reservation.addReservation(roomId, daterange)
+    def make_reservation(date_range)
+      room_reserved = false
+      room_id = get_available_room(date_range)
+      if (room_id != 0)
+        room_reserved = reservation.add_reservation(room_id, date_range)
       end
-      if (reserveRoom == 0)
+
+      if (room_reserved)
         room_booked = {}
-        room_booked[roomId] = date_range
-        reservationsHistory.add(reservationId += 1, roomBooked)
+        room_booked[room_id] = date_range
+        reservations_history.add(@current_reservation_id += 1, room_booked)
       end
     end
 
-    def add_reservation(roomId, daterange)
-      #Adds new daterange to the specific room if daterange is not booked and returns success code 0. Else returns code 1.
-      if (@reservations.key?(roomId) && !@reservations.include?(daterange))
-        @reservations[roomId].push(daterange)
-        return 0
+    def add_reservation(room_id, date_range)
+      #Adds new date_range to the specific room if date_range is not booked and returns success code 0. Else returns code 1.
+      if (@reservations.key?(room_id) && room_available?(room_id, date_range))
+        @reservations[room_id].push(date_range)
+        return true
       end
-      return 1
+      return false
     end
 
-    def remove_reservation(roomId, daterange)
-      #Removes the given daterange from the list for the given room
-      if (@reservations.key?(roomId) && room_free?(room_id, daterange))
-        @reservations[roomId].delete(daterange)
+    def remove_reservation(room_id, date_range)
+      #Removes the given date_range from the list for the given room
+      if (@reservations.key?(room_id))
+        @reservations[room_id].delete(date_range)
       end
     end
 
-    def get_free_rooms(date)
-      free_rooms = []
+    def get_available_room(date)
+      available_room = 0
       @reservations.each_key do |room_id|
-        is_room_free = room_free?(room_id, date)
-        if is_room_free
-          free_rooms.push(room_id)
+        is_room_available = room_available?(room_id, date)
+        if is_room_available
+          available_room = room_id
         end
       end
-      return free_rooms
+
+      return available_room
     end
 
-    def room_free?(room_id, date)
-      is_room_free = true
+    def room_available?(room_id, date)
+      is_room_available = true
       @reservations[room_id].each do |reserved_date|
         if (date.intersects(reserved_date))
-          is_room_free = false
+          is_room_available = false
           break
         end
       end
-      return is_room_free
+
+      return is_room_available
     end
 
     def get_reserved_rooms(date)
-      #Get the list of list of daterange (values of the hashmap) and iterate thru the list. When the date matches get the key(roomId) and store in local list. Return the list of rooms
+      #Get the list of list of date_range (values of the hashmap) and iterate thru the list. When the date matches get the key(room_id) and store in local list. Return the list of rooms
       reserved_rooms = []
       @reservations.each_key do |room_id|
         @reservations[room_id].each do |date_range|

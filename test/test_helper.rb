@@ -1,14 +1,15 @@
 require "simplecov"
 require "minitest"
 require "minitest/autorun"
-require "minitest/reporters"
+# require "minitest/reporters"
+require "minitest/pride"
 require "rake"
 require "date"
 SimpleCov.start do
   add_filter "test/"
 end
 
-Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+#Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 require_relative "../lib/Booker"
 
