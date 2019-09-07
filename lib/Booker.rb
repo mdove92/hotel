@@ -58,8 +58,9 @@ module Hotel
     #   return @reservations_history[reservation_id]
     # end
 
-    def make_reservation(date_range)
+    def make_reservation(start_date, end_date)
       room_reserved = false
+      date_range = Hotel::DateRange.new(start_date, end_date)
       room_id = select_room(date_range)
       if (room_id != 0)
         # room_reserved = add_reservation(room_id, date_range)
