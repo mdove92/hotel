@@ -47,10 +47,9 @@ module Hotel
       room_id = select_room(date_range)
       if (room_id != 0)
         # room_reserved = add_reservation(room_id, date_range)
-
-        room_booked = Hotel::Reservation.new(date_range.start_date, date_range.end_date, room_id)
+        room_booked = Hotel::Reservation.new(start_date, end_date, room_id)
         @reservations[room_id].push(room_booked)
-        reservations_history.add(@current_reservation_id += 1, room_booked)
+        @reservations_history[@current_reservation_id += 1] = room_booked
       end
       return @current_reservation_id
     end
@@ -102,6 +101,25 @@ module Hotel
       end
 
       return reserved_rooms
+    end
+
+    def available_rooms(date_range)
+      #Get the list of list of daterange (values of the hashmap) and iterate thru the list. When the date matches get the key(roomId) and store in local list. Return the list of rooms
+      available_rooms = []
+      @reservations.each_key do |room_id|
+        @reservations[room_id].each do |room_range|
+
+          # I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
+          # I can reserve an available room for a given date range
+          # I want an exception raised if I try to reserve a room that is unavailable for a given day, so that I cannot make two reservations for the same room that overlap by date
+
+          if !date_range.overlap?
+            available_rooms.push(room_id)
+            break
+          end
+        end
+      end
+      return available_rooms
     end
   end
 end

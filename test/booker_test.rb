@@ -15,48 +15,65 @@ describe "Booker class" do
     end
   end
 
-  before do
-    @booker = Hotel::Booker.new(number_of_rooms: 20)
+  describe "select_room" do
+    before do
+      @book = Hotel::Booker.new(number_of_rooms: 20)
+
+      @test_start = "2019/12/25"
+      @test_end = "2019/12/28"
+      @test_range = Hotel::DateRange.new(@test_start, @test_end)
+    end
+    it "takes a daterange and returns a selected room number" do
+      reservation = @book.select_room(@test_range)
+      expect(reservation).must_be_kind_of Integer
+    end
   end
-  describe "wave 1" do
-    describe "rooms" do
-      it "returns a list" do
-        rooms = @booker.room_list
-        expect(rooms).must_be_kind_of Array
-      end
+  describe "make_reservation" do
+    before do
+      @book = Hotel::Booker.new(number_of_rooms: 20)
+
+      @test_start = "2019/12/25"
+      @test_end = "2019/12/28"
+      @test_range = Hotel::DateRange.new(@test_start, @test_end)
     end
-    xdescribe "reserve_room" do
-      it "takes two Date objects and returns a Reservation" do
-        start_date = @date
-        end_date = start_date + 3
+    it "takes a start_date and end_date and returns a reservation_id" do
+      reservation = @book.make_reservation(@test_start, @test_end)
+      expect(reservation).must_be_kind_of Integer
+      # expect(reservation).must_be :<= 20
 
-        reservation = @hotel_controller.reserve_room(start_date, end_date)
-
-        expect(reservation).must_be_kind_of Hotel::Reservation
-      end
-    end
-
-    xdescribe "reservations" do
-      it "takes a Date and returns a list of Reservations" do
-        reservation_list = @hotel_controller.reservations(@date)
-
-        expect(reservation_list).must_be_kind_of Array
-        reservation_list.each do |res|
-          res.must_be_kind_of Reservation
-        end
-      end
     end
   end
 
-  xdescribe "wave 2" do
+  describe "find_reservations_by_date" do
+    before do
+      @book = Hotel::Booker.new(number_of_rooms: 20)
+
+      @test_start = "2019/12/25"
+      @test_end = "2019/12/28"
+      @test_range = Hotel::DateRange.new(@test_start, @test_end)
+    end
+    it "takes a Date and returns an array of Reservations" do
+      reservation_list = @book.find_reservations_by_date(@test_start)
+
+      expect(reservation_list).must_be_kind_of Array
+      reservation_list.each do |room_id, reservation|
+        reservation.must_be_kind_of Reservation
+      end
+    end
+  end
+
+  describe "wave 2" do
     describe "available_rooms" do
-      it "takes two dates and returns a list" do
-        start_date = @date
-        end_date = start_date + 3
+      before do
+        @book = Hotel::Booker.new(number_of_rooms: 20)
 
-        room_list = @hotel_controller.available_rooms(start_date, end_date)
-
-        expect(room_list).must_be_kind_of Array
+        @test_start = "2019/12/25"
+        @test_end = "2019/12/28"
+        @test_range = Hotel::DateRange.new(@test_start, @test_end)
+      end
+      it "takes a date and returns a list" do
+        available_rooms = @book.available_rooms(@test_range)
+        expect(available_rooms).must_be_kind_of Array
       end
     end
   end
