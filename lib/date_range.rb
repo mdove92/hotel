@@ -23,7 +23,3 @@ module Hotel
     end
   end
 end
-
-test_stay = Hotel::DateRange.new("2019/11/25", "2019/11/29")
-puts test_stay.duration
-puts

@@ -18,7 +18,11 @@ describe "DateRange class" do
         expect(range.end_date).must_equal Date.parse(end_date)
       end
 
-      xit "raises an argument error for a invalid date range" do
+      it "raises an argument error for a invalid date range" do
+        start_date = "2019/12/27"
+        end_date = "2019/12/26"
+
+        expect { Hotel::DateRange.new(start_date, end_date) }.must_raise ArgumentError
       end
     end
 
@@ -28,43 +32,81 @@ describe "DateRange class" do
         end_date = "2019/12/29"
 
         @range = Hotel::DateRange.new(start_date, end_date)
+        @start_date = @range.start_date
+        @end_date = @range.end_date
       end
 
       it "returns true for the same range" do
-        start_date = @range.start_date
-        end_date = @range.end_date
         test_range = @range
 
         expect(@range.overlaps?(test_range)).must_equal true
       end
 
-      xit "returns true for a contained range" do
+      it "returns true for a contained range" do
+        test_start = "2019/12/26"
+        test_end = "2019/12/28"
+        test_range = Hotel::DateRange.new(test_start, test_end)
+        expect(@range.overlaps?(test_range)).must_equal true
       end
 
-      xit "returns true for a range that overlaps in front" do
+      it "returns true for a range that overlaps in front" do
+        test_start = "2019/12/24"
+        test_end = "2019/12/27"
+        test_range = Hotel::DateRange.new(test_start, test_end)
+        expect(@range.overlaps?(test_range)).must_equal true
       end
 
-      xit "returns true for a range that overlaps in the back" do
+      it "returns true for a range that overlaps in the back" do
+        test_start = "2019/12/27"
+        test_end = "2019/12/30"
+        test_range = Hotel::DateRange.new(test_start, test_end)
+        expect(@range.overlaps?(test_range)).must_equal true
       end
 
-      xit "returns true for a containing range" do
+      it "returns true for a containing range" do
+        test_start = "2019/12/23"
+        test_end = "2019/12/30"
+        test_range = Hotel::DateRange.new(test_start, test_end)
+        expect(@range.overlaps?(test_range)).must_equal true
       end
 
-      xit "returns false for a range starting on the end_date date" do
+      it "returns false for a range starting on the end_date date" do
+        test_start = "2019/12/29"
+        test_end = "2019/12/30"
+        test_range = Hotel::DateRange.new(test_start, test_end)
+        expect(@range.overlaps?(test_range)).must_equal false
       end
 
-      xit "returns false for a range ending on the start_date date" do
+      it "returns false for a range ending on the start_date date" do
+        test_start = "2019/12/21"
+        test_end = "2019/12/25"
+        test_range = Hotel::DateRange.new(test_start, test_end)
+        expect(@range.overlaps?(test_range)).must_equal false
       end
 
-      xit "returns false for a range completely before" do
+      it "returns false for a range completely before" do
+        test_start = "2019/12/17"
+        test_end = "2019/12/20"
+        test_range = Hotel::DateRange.new(test_start, test_end)
+        expect(@range.overlaps?(test_range)).must_equal false
       end
 
-      xit "returns false for a date completely after" do
+      it "returns false for a date completely after" do
+        test_start = "2020/01/25"
+        test_end = "2020/01/30"
+        test_range = Hotel::DateRange.new(test_start, test_end)
+        expect(@range.overlaps?(test_range)).must_equal false
       end
     end
 
-    xdescribe "duration" do
+    describe "duration" do
       it "returns the correct number of nights" do
+        start_date = "2019/12/25"
+        end_date = "2019/12/29"
+
+        range = Hotel::DateRange.new(start_date, end_date)
+
+        expect(range.duration).must_equal 4
       end
     end
   end
