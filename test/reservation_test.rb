@@ -5,8 +5,8 @@ describe "Reservation class" do
     it "returns a number" do
       test_start = "2019/12/17"
       test_end = "2019/12/20"
-
-      reservation = Hotel::Reservation.new(test_start, test_end, 12)
+      date_range = Hotel::DateRange.new(test_start, test_end)
+      reservation = Hotel::Reservation.new(date_range, 12)
       expect(reservation.cost).must_be_kind_of Numeric
     end
   end
