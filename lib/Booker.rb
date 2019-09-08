@@ -31,6 +31,7 @@ module Hotel
         is_room_available = room_available?(room_id, date_range)
         if is_room_available
           available_room = room_id
+          break
         end
       end
 
@@ -42,7 +43,6 @@ module Hotel
     # end
 
     def make_reservation(start_date, end_date)
-      room_reserved = false
       date_range = Hotel::DateRange.new(start_date, end_date)
       room_id = select_room(date_range)
       if (room_id != 0)
@@ -51,7 +51,7 @@ module Hotel
         @reservations[room_id].push(room_booked)
         @reservations_history[@current_reservation_id += 1] = room_booked
       end
-      return @current_reservation_id
+      return room_booked
     end
 
     # def add_reservation(room_id, date_range)
@@ -96,7 +96,7 @@ module Hotel
 
         # If there is overlap, add it to the list of rooms reserved
         if (is_room_booked)
-          reserved_rooms.push(reservation)
+          reserved_rooms.push(room_id)
         end
       end
 
@@ -107,15 +107,19 @@ module Hotel
       #Get the list of list of daterange (values of the hashmap) and iterate thru the list. When the date matches get the key(roomId) and store in local list. Return the list of rooms
       available_rooms = []
       @reservations.each_key do |room_id|
-        @reservations[room_id].each do |room_range|
+        if (@reservations[room_id].length == 0)
+          available_rooms.push(room_id)
+        else
+          @reservations[room_id].each do |room_range|
 
-          # I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
-          # I can reserve an available room for a given date range
-          # I want an exception raised if I try to reserve a room that is unavailable for a given day, so that I cannot make two reservations for the same room that overlap by date
+            # I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
+            # I can reserve an available room for a given date range
+            # I want an exception raised if I try to reserve a room that is unavailable for a given day, so that I cannot make two reservations for the same room that overlap by date
 
-          if !date_range.overlap?
-            available_rooms.push(room_id)
-            break
+            if !date_range.overlaps?(room_range.date_range)
+              available_rooms.push(room_id)
+              break
+            end
           end
         end
       end
