@@ -1,5 +1,3 @@
-
-
 module Hotel
   class Block
     attr_reader :date_range, :rooms, :discounted_cost
@@ -7,7 +5,7 @@ module Hotel
     def initialize(date_range, rooms, discounted_cost)
       @date_range = date_range
       @rooms = rooms
-      @discounted_cost = cost
+      @discounted_cost = discounted_cost
     end
   end
 end

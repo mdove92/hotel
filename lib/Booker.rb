@@ -73,10 +73,10 @@ module Hotel
     #   return false
     # end
 
-    def remove_reservation(room_id, reservation)
+    def remove_reservation(reservation)
       #Removes the given date_range from the list for the given room
-      if (@reservations.key?(room_id))
-        @reservations[room_id].delete(reservation)
+      if (@reservations.key?(reservation.room_id))
+        @reservations[reservation.room_id].delete(reservation)
       end
     end
 
@@ -97,16 +97,16 @@ module Hotel
       start_date = date
       end_date = date
       date_to_find = Hotel::DateRange.new(start_date, end_date)
-
+      date_to_find.end_date += 1
       # Iterate over all the keys (room_ids) in @reservations
-      @reservations.each do |room_id, reservation|
+      @reservations_history.each_value do |reservation|
 
         # Check if room has overlap for that day
-        is_room_booked = !room_available?(room_id, date_to_find)
+        is_room_booked = !room_available?(reservation.room_id, date_to_find)
 
         # If there is overlap, add it to the list of rooms reserved
         if (is_room_booked)
-          reserved_rooms.push(room_id)
+          reserved_rooms.push(reservation)
         end
       end
 
@@ -137,6 +137,7 @@ module Hotel
     end
 
     def book_block(block)
+      reservations = []
       if (block.rooms.length > 5)
         throw ArgumentError.new("More than 5 rooms in block")
       end
@@ -148,11 +149,14 @@ module Hotel
       end
 
       block.rooms.each do |room|
-        create_reservation_for_room(room, block.date_range, block.rate)
+        block_reservation = create_reservation_for_room(room, block.date_range, block.discounted_cost)
+        reservations.push(block_reservation)
       end
+
+      return reservations
     end
 
-    def rooms_available_in_block?(block)
+    def get_rooms_available_from_block(block)
       available_rooms = []
 
       block.rooms.each do |room|
@@ -165,7 +169,7 @@ module Hotel
     end
 
     def reserve_room_from_block(room_id, block)
-      create_reservation_for_room(room_id, block.date_range, block.rate)
+      return create_reservation_for_room(room_id, block.date_range, block.discounted_cost)
     end
 =begin 
 If you are not familiar with what a block of hotel rooms, here is a brief description:
