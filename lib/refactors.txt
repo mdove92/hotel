@@ -1,0 +1,8 @@
+
+
+Hello, 
+I would perhaps refactor Reservations class to be able to intake a Block,
+ so that I could create a block reservation without having to create several reservations.
+Also, my code could be more loosely coupled. I could achieve this through breaking down the Booker class into smaller classes more single-resposibility oriented.
+Booker creates instances of reservations as it is now, but, I could change that by creating a reservation factory and moving all of the associated reservation methods to within that class.
+Booker could then have a reservation factory object to create reservations instead of several methods and instantiation of reservations. 

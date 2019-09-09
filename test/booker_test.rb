@@ -6,7 +6,7 @@ describe "Booker class" do
     before do
       @book = Hotel::Booker.new(number_of_rooms: 20)
     end
-    it "get initialized as a type of Booker" do
+    it "gets initialized as a type of Booker" do
       expect @book.must_be_kind_of Hotel::Booker
     end
     it "creates an array of 20 hotel Ids" do

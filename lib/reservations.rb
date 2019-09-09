@@ -15,11 +15,5 @@ module Hotel
       cost = stay_length * @rate
       return cost
     end
-
-    #def available?(date_range, room_id)
-    # end
-    #def make_reservation(date_range, room_id)
-    #room.status = :UNAVAILABLE
-    #end
   end
 end
