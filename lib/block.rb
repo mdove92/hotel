@@ -7,5 +7,11 @@ module Hotel
       @rooms = rooms
       @discounted_cost = discounted_cost
     end
+
+    def validate(is_room_available)
+      if @rooms.length > 5 || !is_room_available
+        throw ArgumentError.new("More than 5 rooms in block")
+      end
+    end
   end
 end

@@ -118,21 +118,15 @@ module Hotel
 
     def book_block(block)
       reservations = []
-      if (block.rooms.length > 5)
-        throw ArgumentError.new("More than 5 rooms in block")
-      end
-
+      rooms_available = true
       block.rooms.each do |room|
-        if (!room_available?(room, block.date_range))
-          raise ArgumentError.new("Date range is unavailable")
-        end
+        rooms_available = rooms_available && room_available?(room, block.date_range)
       end
-
+      block.validate(rooms_available)
       block.rooms.each do |room|
         block_reservation = create_reservation_for_room(room, block.date_range, block.discounted_cost)
         reservations.push(block_reservation)
       end
-
       return reservations
     end
 

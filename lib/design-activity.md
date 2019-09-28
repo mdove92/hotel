@@ -31,7 +31,7 @@ If we decide items are cheaper if bought in bulk, how would this change the code
 B is easier to modify because we only need to make a change in one place instead of the cascading effect in A.
 
 Which implementation better adheres to the single responsibility principle?
-B adheres to single responibility better, as each class is not calling on several classes to calculate multiiple things in each of it's method. 
+B adheres to single responsibility better, as each class is not calling on several classes to calculate multiple things in each of it's method. 
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 
 B is more loosely coupled because the classes don't need to know so much about one another. 
@@ -41,29 +41,12 @@ B is more loosely coupled because the classes don't need to know so much about o
 
 
 Once you've responded to the prompts, git add design-activity.md and git commit!
-Revisiting Hotel
-
-Now that we've got you thinking about design, spend some time to revisit the code you wrote for the Hotel project. For each class in your program, ask yourself the following questions:
-
-    What is this class's responsibility?
-        You should be able to describe it in a single sentence.
-        
-    Is this class responsible for exactly one thing?
-    Does this class take on any responsibility that should be delegated to "lower level" classes?
-    Is there code in other classes that directly manipulates this class's instance variables?
-
-You might recall writing a file called refactor.txt. Take a look at the refactor plans that you wrote, and consider the following:
-
-    How easy is it to follow your own instructions?
-    Do these refactors improve the clarity of your code?
-    Do you still agree with your previous assesment, or could your refactor be further improved?
+ 
 
 Activity
 
 Based on the answers to each set of the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how the resulting design would be an improvement.
 
-If you need inspiration, remember that the reference implementation exists.
+My Booker class ended up taking on more roles than I would have liked.
+One place that I could loosen the coupling between my classes is in my Booker class method book_block. I could add a helper method inside of Block to check for validation so that Booker does not need to reach into a Block's rooms attribute to run its method. I moved the validate block method into Block class so that I didn't need for Booker to reach into the arguments of initializing a Block. 
 
-Then make the changes! Don't forget to take advantage of all the tests you wrote - if they're well structured, they should quickly inform you when your refactoring breaks something.
-
-Once you're satisfied, git commit your changes and then push them to GitHub. This will automatically update your pull request.
